@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { QRCodeCanvas } from "qrcode.react";
 
 function PreAccessQRPage() {
-  const inicioUrl = `${window.location.origin}/inicio`;
+  const inicioUrl = `${window.location.origin}${window.location.pathname}#/inicio`;
 
   return (
     <main className="container center">
