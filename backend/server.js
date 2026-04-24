@@ -2,13 +2,17 @@ const express = require("express");
 const cors = require("cors");
 const sqlite3 = require("sqlite3").verbose();
 const path = require("path");
+const crypto = require("crypto");
 
 const app = express();
 const PORT = process.env.PORT || 4000;
 const FRONTEND_ORIGIN = process.env.FRONTEND_ORIGIN || "";
+const STAFF_USER = process.env.STAFF_USER || "secretaria";
+const STAFF_PASS = process.env.STAFF_PASS || "123456";
 const allowedOrigins = FRONTEND_ORIGIN.split(",")
   .map((origin) => origin.trim())
   .filter(Boolean);
+const activeTokens = new Set();
 
 app.use(
   cors({
@@ -85,8 +89,30 @@ function validarPayload(payload) {
   return null;
 }
 
+function authMiddleware(req, res, next) {
+  const authHeader = req.headers.authorization || "";
+  const token = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : "";
+  if (!token || !activeTokens.has(token)) {
+    return res.status(401).json({ error: "No autorizado." });
+  }
+  return next();
+}
+
 app.get("/api/health", (_req, res) => {
   res.json({ ok: true });
+});
+
+app.post("/api/staff/login", (req, res) => {
+  const username = String(req.body.username || "").trim();
+  const password = String(req.body.password || "").trim();
+
+  if (username !== STAFF_USER || password !== STAFF_PASS) {
+    return res.status(401).json({ error: "Credenciales incorrectas." });
+  }
+
+  const token = crypto.randomBytes(24).toString("hex");
+  activeTokens.add(token);
+  return res.json({ token, username });
 });
 
 app.post("/api/visitas", (req, res) => {
@@ -158,6 +184,15 @@ app.get("/api/visitas/:codigo", (req, res) => {
       return res.status(404).json({ error: "No se encontro la visita." });
     }
     return res.json(row);
+  });
+});
+
+app.get("/api/visitas", authMiddleware, (_req, res) => {
+  db.all("SELECT * FROM visitas ORDER BY fecha_hora_entrada DESC", [], (err, rows) => {
+    if (err) {
+      return res.status(500).json({ error: "No se pudieron listar las visitas." });
+    }
+    return res.json(rows);
   });
 });
 
