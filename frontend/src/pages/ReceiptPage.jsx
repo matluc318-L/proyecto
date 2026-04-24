@@ -105,10 +105,6 @@ function ReceiptPage() {
           <strong>Grado y seccion:</strong> {visit.grado} - {visit.seccion}
         </p>
         <p>
-          <strong>Fecha y hora de visita:</strong>{" "}
-          {visit.scheduled_visit_at ? new Date(visit.scheduled_visit_at).toLocaleString("es-PE") : "No definida"}
-        </p>
-        <p>
           <strong>Fecha y hora de entrada:</strong> {new Date(visit.fecha_hora_entrada).toLocaleString("es-PE")}
         </p>
 

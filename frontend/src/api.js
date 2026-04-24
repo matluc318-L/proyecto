@@ -32,37 +32,3 @@ export async function getVisitByCode(code) {
   }
   return payload;
 }
-
-export async function staffLogin(credentials) {
-  let response;
-  try {
-    response = await fetch(`${API_BASE}/staff/login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(credentials)
-    });
-  } catch (_error) {
-    throw new Error("No se pudo conectar con el servidor. Verifica que el backend este ejecutandose.");
-  }
-  const payload = await response.json().catch(() => ({}));
-  if (!response.ok) {
-    throw new Error(payload.error || "No se pudo iniciar sesion.");
-  }
-  return payload;
-}
-
-export async function getAllVisits(token) {
-  let response;
-  try {
-    response = await fetch(`${API_BASE}/visitas`, {
-      headers: { Authorization: `Bearer ${token}` }
-    });
-  } catch (_error) {
-    throw new Error("No se pudo conectar con el servidor. Verifica que el backend este ejecutandose.");
-  }
-  const payload = await response.json().catch(() => ({}));
-  if (!response.ok) {
-    throw new Error(payload.error || "No se pudieron cargar los registros.");
-  }
-  return payload;
-}

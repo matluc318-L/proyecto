@@ -28,21 +28,6 @@ function RegisterPage() {
       return "El celular debe tener entre 9 y 15 digitos numericos.";
     }
 
-    if (!formData.fecha_visita) {
-      return "Debes seleccionar la fecha de visita.";
-    }
-
-    const today = new Date();
-    const selected = new Date(`${formData.fecha_visita}T00:00:00`);
-    const minDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-    if (selected < minDate) {
-      return "La fecha de visita no puede ser anterior a hoy.";
-    }
-
-    if (!formData.hora_visita) {
-      return "Debes seleccionar la hora de visita.";
-    }
-
     return "";
   }
 
