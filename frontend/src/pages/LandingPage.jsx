@@ -15,6 +15,9 @@ function LandingPage() {
           <Link className="button" to="/registro">
             Comenzar registro
           </Link>
+          <Link className="button secondary" to="/login-personal">
+            Ingreso de personal
+          </Link>
           <a className="button secondary" href="#vista-previa">
             Ver vista previa
           </a>
