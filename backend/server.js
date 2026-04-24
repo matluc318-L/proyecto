@@ -4,7 +4,6 @@ const sqlite3 = require("sqlite3").verbose();
 const path = require("path");
 
 const app = express();
-<<<<<<< HEAD
 const PORT = process.env.PORT || 4000;
 const FRONTEND_ORIGIN = process.env.FRONTEND_ORIGIN || "";
 const allowedOrigins = FRONTEND_ORIGIN.split(",")
@@ -22,11 +21,6 @@ app.use(
     }
   })
 );
-=======
-const PORT = 4000;
-
-app.use(cors());
->>>>>>> bb319262cc6fa5dfa549710691932160ecccd321
 app.use(express.json());
 
 const dbPath = path.join(__dirname, "database.db");
